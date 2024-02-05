@@ -21,5 +21,5 @@ void error(){
 }
 
 void mode_switch(){
-  
+  // switch to dispensing mode from input mode
 }
