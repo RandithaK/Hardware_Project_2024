@@ -1,3 +1,5 @@
+#define error_pin 13
+
 void setup() {
   // put your setup code here, to run once:
 
