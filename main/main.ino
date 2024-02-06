@@ -39,6 +39,9 @@ void dispense();
 void error();
 void mode_switch();
 
+
+
+// This is the entry point of the program
 void setup() {
   // put your setup code here, to run once:
   lcd.init();
@@ -46,10 +49,17 @@ void setup() {
 
 }
 
+
+// This is the loop section of the program.
+// Will be executed till the machine is turned off.
 void loop() {
   // put your main code here, to run repeatedly:
 
 }
+
+
+
+
 
 void get_keypad_input(){
   // put code to get keypad input
@@ -61,8 +71,17 @@ void dispense(){
 
 void error(){
   // activate buzzer to give cricket alarm
+  
 }
 
 void mode_switch(){
   // switch to dispensing mode from input mode
+  if (digitalRead(mode_switch) == HIGH)
+  {
+    digitalWrite(mode_switch,LOW);
+  }
+  else
+  {
+    digitalWrite(mode_switch,HIGH);
+  }
 }
