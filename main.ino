@@ -8,16 +8,17 @@ void loop() {
 
 }
 
-void get_keypad_input(){
+void get_keypad_input(int* amount, char* type){
   // put code to get keypad input
 }
 
-void dispense(){
+void dispense(int* amount, char* type){
   // put code to dispense gram
 }
 
 void error(){
   // activate buzzer to give cricket alarm
+  // Alarm should run till the * key is pressed
 }
 
 void mode_switch(){
