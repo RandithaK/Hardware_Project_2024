@@ -1,3 +1,8 @@
+void get_keypad_input(int* amount, char* type);
+void dispense(int* amount, char* type);
+void error();
+void mode_switch();
+
 void setup() {
   // put your setup code here, to run once:
 
