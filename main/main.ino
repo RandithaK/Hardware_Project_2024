@@ -23,6 +23,8 @@ void mode_switch();
 
 void setup() {
   // put your setup code here, to run once:
+  lcd.init();
+  lcd.backlight();
 
 }
 
