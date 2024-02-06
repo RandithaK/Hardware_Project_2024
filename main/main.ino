@@ -8,23 +8,25 @@
 
 // Pin definitions
 // Pin definitions should be added here and any references to the pins should be done through these definitions and should never be made directly to the pin address unless absolutely necessary.
-#define error_pin 13
+
 #define dispenser_0 A0
 #define dispenser_1 A1
 #define dispenser_2 A2
 #define weight_cell A3
+// Pins A4 and A5 are used as communication pins SCL and SDA with the LCD
+// Pins 0 and 1 used for serial communication and hence not used for any other purpose for stabilty
 #define sealer_assembly 2
 #define servo 3
 #define mode_switch 4
-#define keypad_row1 12
-#define keypad_row2 11
-#define keypad_row3 10
-#define keypad_row4 9
-#define keypad_col1 8
-#define keypad_col2 7
-#define keypad_col3 6
 #define keypad_col4 5
-
+#define keypad_col3 6
+#define keypad_col2 7
+#define keypad_col1 8
+#define keypad_row4 9
+#define keypad_row3 10
+#define keypad_row2 11
+#define keypad_row1 12
+#define error_pin 13
 
 
 // Setting up devices
