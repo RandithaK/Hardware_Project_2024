@@ -11,6 +11,8 @@
 #define error_pin 13
 
 
+// Setting up devices
+LiquidCrystal_I2C lcd(0x27,20,4); // Setting up the LCD at address 0x27
 
 
 //Function Prototypes
