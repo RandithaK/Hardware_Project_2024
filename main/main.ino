@@ -37,7 +37,7 @@ LiquidCrystal_I2C lcd(0x27,20,4); // Setting up the LCD at address 0x27
 void get_keypad_input();
 void dispense();
 void error();
-void mode_switch();
+void mode_switcher();
 
 
 
@@ -70,11 +70,19 @@ void dispense(){
 }
 
 void error(){
-  // activate buzzer to give cricket alarm
+  pinMode(error_pin , OUTPUT);
+  while (1)
+  {
+    digitalWrite(error_pin, HIGH);
+    delay(350);
+    digitalWrite(error_pin, LOW);
+    delay(150);
+  }
+  
   
 }
 
-void mode_switch(){
+void mode_switcher(){
   // switch to dispensing mode from input mode
   if (digitalRead(mode_switch) == HIGH)
   {
