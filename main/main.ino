@@ -18,8 +18,8 @@
 #define dispenser_2_Close A5
 
 // Sealing Unit Control
-#define sealer_assembly_Open 52
-#define sealer_assembly_Open 53
+#define sealer_assembly_Step 52
+#define sealer_assembly_Direction 53
 
 // Weight Scale
 #define weight_cell_DATA 4
