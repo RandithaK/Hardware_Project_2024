@@ -21,15 +21,12 @@
 #define sealer_assembly_Open 52
 #define sealer_assembly_Open 53
 
-
 // Weight Scale
 #define weight_cell_DATA 4
 #define weight_cell_CLK 5
 
 // Pins A4 and A5 are used as communication pins SCL and SDA with the LCD
 // Pins 0 and 1 used for serial communication and hence not used for any other purpose for stabilty
-
-
 
 // Keypad Connections
 #define keypad_col1 30
@@ -45,27 +42,18 @@
 // Buzzer
 #define Buzzer 13
 
-
 // Setting up devices
-LiquidCrystal_I2C lcd(0x27,20,4); // Setting up the LCD at address 0x27
+LiquidCrystal_I2C lcd(0x27, 20, 4); // Setting up the LCD at address 0x27
 
-
-void setup() {
+void setup()
+{
   // put your setup code here, to run once:
-
 }
 
-void loop() {
+void loop()
+{
   // put your main code here, to run repeatedly:
-
 }
-
-
-
-
-
-
-
 
 /*
 //Function Prototypes
@@ -113,8 +101,8 @@ void error(){
     digitalWrite(error_pin, LOW);
     delay(150);
   }
-  
-  
+
+
 }
 
 void mode_switcher(){
