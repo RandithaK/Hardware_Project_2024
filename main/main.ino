@@ -45,6 +45,11 @@
 // Setting up devices
 LiquidCrystal_I2C lcd(0x27, 20, 4); // Setting up the LCD at address 0x27
 
+// Offset values for Grams
+#define Type_1 0
+#define Type_2 0
+#define Type_3 0
+
 void setup()
 {
   // put your setup code here, to run once:
