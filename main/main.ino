@@ -82,9 +82,9 @@ Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 // End of Library Code for Keypad
 
 // Buzzer
+
 #define buzzer 13
 
-// Setting up devices
 LiquidCrystal_I2C lcd(0x27, 20, 4); // Setting up the LCD at address 0x27
 
 // Offset values for Grams
@@ -118,7 +118,7 @@ void setup()
 {
   // put your setup code here, to run once:
 
-  // Setup Dispensers
+  // Setup Dispensers as output pins
   pinMode(dispenser_0_Open, OUTPUT);
   pinMode(dispenser_0_Close, OUTPUT);
   pinMode(dispenser_1_Open, OUTPUT);
