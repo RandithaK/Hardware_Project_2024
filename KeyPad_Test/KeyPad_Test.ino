@@ -7,7 +7,7 @@
 || | Demonstrates the simplest use of the matrix Keypad library.
 || #
 */
-#include <Keypad.h>
+  #include <Keypad.h>
 
 const byte ROWS = 4; //four rows
 const byte COLS = 4; //three columns
@@ -23,7 +23,7 @@ byte colPins[COLS] = {5, 4, 3, 2}; //connect to the column pinouts of the keypad
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(9600);   
 }
   
 void loop(){

@@ -28,7 +28,7 @@ void loop()
     // read all the available characters
     while (Serial.available() > 0) {
       // display each character to the LCD
-      lcd.write(Serial.read());
+      lcd.write(Serial.read()); 
     }
   }
 }
