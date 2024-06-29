@@ -253,12 +253,15 @@ void dispence(char typetodispence, int weighttodispence)
 
 void dispenceMixture(int weighttodispence)
 {
-  int smallWeights = weighttodispence / 3;
+  int smallWeights = weighttodispence / 6;
   for (int i = 0; i < 2; i++)
   {
     dispence('A',smallWeights);
-    dispence('B',smallWeights);
+    delay(1000);
     dispence('C',smallWeights);
+    delay(1000);
+    dispence('B',smallWeights);
+    delay(1000);
   }
   
 }
