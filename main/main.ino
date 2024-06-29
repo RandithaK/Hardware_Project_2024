@@ -109,7 +109,7 @@ void openhopper(char hopper);
 // To close the hopper
 void closehopper(char hopper);
 // A helpper function to make mixtures
-dispenceMixture(weighttodispence)
+void dispenceMixture(int weighttodispence);
 
 // Main Entry Point
 void setup()
@@ -240,15 +240,27 @@ void beeper(int beeps)
 
 void dispence(char typetodispence, int weighttodispence)
 {
-  delay(100)
+  delay(100);
   int tare = getWeightFromScale();
   int target = tare + weighttodispence;
-  openhopper();
+  openhopper(typetodispence);
   do
   {
     delay(100);
   } while (target > getWeightFromScale());
-  closehopper();
+  closehopper(typetodispence);
+}
+
+void dispenceMixture(int weighttodispence)
+{
+  int smallWeights = weighttodispence / 3;
+  for (int i = 0; i < 2; i++)
+  {
+    dispence('A',smallWeights);
+    dispence('B',smallWeights);
+    dispence('C',smallWeights);
+  }
+  
 }
 
 void openhopper(char dispenser)
