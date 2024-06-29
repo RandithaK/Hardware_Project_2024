@@ -88,9 +88,9 @@ Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 LiquidCrystal_I2C lcd(0x27, 20, 4); // Setting up the LCD at address 0x27
 
 // Offset values for Grams
-#define Type_1 0
-#define Type_2 0
-#define Type_3 0
+#define Type1OffSet 0
+#define Type2OffSet 0
+#define Type3OffSet 0
 
 // Custom Functions Prototypes
 
@@ -242,7 +242,21 @@ void dispence(char typetodispence, int weighttodispence)
 {
   delay(100);
   int tare = getWeightFromScale();
-  int target = tare + weighttodispence;
+  int offset;
+  switch (typetodispence)
+  {
+  case 'A':
+    offset = Type1OffSet;
+    break;
+  case 'B':
+    offset = Type2OffSet;
+    break;
+  case 'C':
+    offset = Type3OffSet;
+    break;
+  
+  }
+  int target = tare + weighttodispence - offset;
   openhopper(typetodispence);
   do
   {
