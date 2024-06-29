@@ -272,9 +272,9 @@ void dispenceMixture(int weighttodispence)
   {
     dispence('A',smallWeights);
     delay(1000);
-    dispence('C',smallWeights);
-    delay(1000);
     dispence('B',smallWeights);
+    delay(1000);
+    dispence('C',smallWeights);
     delay(1000);
   }
   
