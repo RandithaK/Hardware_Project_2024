@@ -93,12 +93,20 @@ LiquidCrystal_I2C lcd(0x27, 20, 4); // Setting up the LCD at address 0x27
 #define Type_3 0
 
 // Custom Functions Prototypes
+
+// Give an audio alert to the user
 void beeper(int beeps);
+// Get the Order details from the customer
 int getdetails(char *typetodispence);
+// Getts a character from the KeyPad
 char getachar();
+// To dispence a given amount from a given type
 void dispence(char typetodispence, int weighttodispence);
+// To get the mass from the scale
 int getWeightFromScale();
+// To open the hopper
 void openhopper(char hopper);
+// To close the hopper
 void closehopper(char hopper);
 
 // Main Entry Point
