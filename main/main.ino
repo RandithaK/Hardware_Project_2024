@@ -226,7 +226,7 @@ int getdetails(char *typetodispence)
     lcd.print("Weight gramms");
     lcd.setCursor(3, 1);
     String weightDisplay = String(weight);
-    lcd.print("And Type");
+    lcd.print(weightDisplay);
   }
 }
 
