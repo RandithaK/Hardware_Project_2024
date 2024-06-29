@@ -182,7 +182,7 @@ void loop()
   }
   else
   {
-    dispence(typetodispence,weighttodispence);
+    dispence(typetodispence, weighttodispence);
   }
 }
 
@@ -192,24 +192,41 @@ void loop()
 int getdetails(char *typetodispence)
 {
   int weight = 0;
-  char got = getachar();
-  if (got == '*')
+  lcd.clear();
+  lcd.setCursor(3, 0);
+  lcd.print("Enter Amount");
+  lcd.setCursor(3, 1);
+  lcd.print("And Type");
+
+  while (1)
   {
-    weight /= 10;
-  }
-  else if (got == '#')
-  {
-    weight = 0;
-  }
-  else if (got == 'A' || got == 'B' || got == 'C' || got == 'D')
-  {
-    *typetodispence = got;
-    return weight;
-  }
-  else
-  {
-    weight *= 10;
-    weight += got - '0';
+    char got = getachar();
+
+    if (got == '*')
+    {
+      weight /= 10;
+    }
+    else if (got == '#')
+    {
+      weight = 0;
+    }
+    else if (got == 'A' || got == 'B' || got == 'C' || got == 'D')
+    {
+      *typetodispence = got;
+      return weight;
+    }
+    else
+    {
+      weight *= 10;
+      weight += got - '0';
+    }
+
+    lcd.clear();
+    lcd.setCursor(1, 0);
+    lcd.print("Weight gramms");
+    lcd.setCursor(3, 1);
+    String weightDisplay = String(weight);
+    lcd.print("And Type");
   }
 }
 
@@ -254,7 +271,6 @@ void dispence(char typetodispence, int weighttodispence)
   case 'C':
     offset = Type3OffSet;
     break;
-  
   }
   int target = tare + weighttodispence - offset;
   openhopper(typetodispence);
@@ -270,14 +286,13 @@ void dispenceMixture(int weighttodispence)
   int smallWeights = weighttodispence / 6;
   for (int i = 0; i < 2; i++)
   {
-    dispence('A',smallWeights);
+    dispence('A', smallWeights);
     delay(1000);
-    dispence('B',smallWeights);
+    dispence('B', smallWeights);
     delay(1000);
-    dispence('C',smallWeights);
+    dispence('C', smallWeights);
     delay(1000);
   }
-  
 }
 
 void openhopper(char dispenser)
