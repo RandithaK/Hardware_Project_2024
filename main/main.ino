@@ -111,6 +111,8 @@ void openhopper(char hopper);
 void closehopper(char hopper);
 // A helpper function to make mixtures
 void dispenceMixture(int weighttodispence);
+// Ending the program gracefully
+void thankyou()
 
 // Main Entry Point
 void setup() {
