@@ -241,14 +241,14 @@ void openhopper(char dispenser)
     delay(dispenserOpenDelay);
     digitalWrite(dispenser_0_Open, LOW);
     break;
-  case 'B':
 
+  case 'B':
     digitalWrite(dispenser_1_Open, HIGH);
     delay(dispenserOpenDelay);
     digitalWrite(dispenser_1_Open, LOW);
     break;
-  case 'C':
 
+  case 'C':
     digitalWrite(dispenser_2_Open, HIGH);
     delay(dispenserOpenDelay);
     digitalWrite(dispenser_2_Open, LOW);
@@ -264,14 +264,14 @@ void closehopper(char dispenser)
     delay(dispenserCloseDelay);
     digitalWrite(dispenser_0_Close, LOW);
     break;
-  case 'B':
 
+  case 'B':
     digitalWrite(dispenser_1_Close, HIGH);
     delay(dispenserCloseDelay);
     digitalWrite(dispenser_1_Close, LOW);
     break;
-  case 'C':
 
+  case 'C':
     digitalWrite(dispenser_2_Close, HIGH);
     delay(dispenserCloseDelay);
     digitalWrite(dispenser_2_Close, LOW);
@@ -281,4 +281,36 @@ void closehopper(char dispenser)
 
 int getWeightFromScale()
 {
+
+  static boolean newDataReady = 0;
+  const int weightReadDelayInterval = 0; // increase value to slow down serial print activity
+
+  // check for new data/start next conversion:
+  if (LoadCell.update())
+    newDataReady = true;
+
+  // get smoothed value from the dataset:
+  if (newDataReady)
+  {
+    if (millis() > t + weightReadDelayInterval)
+    {
+      float i = LoadCell.getData();
+      newDataReady = 0;
+      t = millis();
+      return i;
+    }
+  }
+  /*
+  I don't think we'll need this code, it's for taring! Which I implemented to be done automatically in my code.
+    // receive command from serial terminal, send 't' to initiate tare operation:
+    if (Serial.available() > 0) {
+      char inByte = Serial.read();
+      if (inByte == 't') LoadCell.tareNoDelay();
+    }
+
+    // check if last tare operation is complete:
+    if (LoadCell.getTareStatus() == true) {
+      Serial.println("Tare complete");
+    }
+  */
 }
