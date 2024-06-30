@@ -29,8 +29,8 @@
 #define dispenser_1_Close A3
 #define dispenser_2_Open A4
 #define dispenser_2_Close A5
-#define dispenserOpenDelay 2000
-#define dispenserCloseDelay 3000
+#define dispenserOpenDelay 2000 // in ms
+#define dispenserCloseDelay 3000 // in ms
 
 // Sealing Unit Control
 #define sealer_assembly_Step 52
