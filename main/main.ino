@@ -116,7 +116,7 @@ void thankyou();
 // Main Entry Point
 void setup()
 {
-  // put your setup code here, to run once:
+  // Code to run once:
 
   // Setup Dispensers as output pins
   pinMode(dispenser_0_Open, OUTPUT);
@@ -129,7 +129,7 @@ void setup()
   lcd.init(); // initialize the lcd
   lcd.backlight();
 
-  lcd.setCursor(3, 0);
+  lcd.setCursor(0, 0);
   lcd.print("Hardware Project");
   lcd.setCursor(2, 1);
   lcd.print("IT Group 12");
