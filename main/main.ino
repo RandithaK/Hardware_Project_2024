@@ -105,6 +105,8 @@ void openhopper(char hopper);
 void closehopper(char hopper);
 // A helpper function to make mixtures
 void dispenceMixture(int weighttodispence);
+// To seal the bag using the stepper motor
+void seal();
 // Ending the program gracefully
 void thankyou();
 
@@ -188,7 +190,7 @@ void loop()
   {
     dispence(typetodispence, weighttodispence);
   }
-
+  seal();
   thankyou();
 }
 
