@@ -6,16 +6,6 @@
 // Library to use I2C protocol
 #include <Wire.h>
 
-// // Library for Stepper
-// Reference page https://www.arduino.cc/reference/en/libraries/stepper/
-#include <Stepper.h>
-
-/*
-// Uncomment if need to control servo motors
-// Reference page https://www.arduino.cc/reference/en/libraries/servo/
-#include <Servo.h>
-*/
-
 // Library for KeyPad
 #include <Keypad.h>
 
@@ -29,8 +19,8 @@
 #define dispenser_1_Close A3
 #define dispenser_2_Open A4
 #define dispenser_2_Close A5
-#define dispenserOpenDelay 2000   // in ms
-#define dispenserCloseDelay 3000  // in ms
+#define dispenserOpenDelay 2000  // in ms
+#define dispenserCloseDelay 3000 // in ms
 
 // Sealing Unit Control
 #define sealer_assembly_Step 52
@@ -67,16 +57,15 @@ unsigned long t = 0;
 
 // Library Code for Keypad
 
-const byte ROWS = 4;  // four rows
-const byte COLS = 4;  // four columns
+const byte ROWS = 4; // four rows
+const byte COLS = 4; // four columns
 char keys[ROWS][COLS] = {
-  { '1', '2', '3', 'A' },
-  { '4', '5', '6', 'B' },
-  { '7', '8', '9', 'C' },
-  { '*', '0', '#', 'D' }
-};
-byte rowPins[ROWS] = { keypad_row1, keypad_row2, keypad_row3, keypad_row4 };  // connect to the row pinouts of the keypad
-byte colPins[COLS] = { keypad_col1, keypad_col2, keypad_col3, keypad_col4 };  // connect to the column pinouts of the keypad
+    {'1', '2', '3', 'A'},
+    {'4', '5', '6', 'B'},
+    {'7', '8', '9', 'C'},
+    {'*', '0', '#', 'D'}};
+byte rowPins[ROWS] = {keypad_row1, keypad_row2, keypad_row3, keypad_row4}; // connect to the row pinouts of the keypad
+byte colPins[COLS] = {keypad_col1, keypad_col2, keypad_col3, keypad_col4}; // connect to the column pinouts of the keypad
 
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
@@ -86,7 +75,12 @@ Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
 #define buzzer 13
 
-LiquidCrystal_I2C lcd(0x27, 20, 4);  // Setting up the LCD at address 0x27
+LiquidCrystal_I2C lcd(0x27, 20, 4); // Setting up the LCD at address 0x27
+
+// Sealing Unit
+#define dirPin 2
+#define stepPin 3
+#define sealerSteps 200 // Change this value as need to adjest the movement of the sealer
 
 // Offset values for Grams
 #define Type1OffSet 0
@@ -115,7 +109,8 @@ void dispenceMixture(int weighttodispence);
 void thankyou();
 
 // Main Entry Point
-void setup() {
+void setup()
+{
   // Code to run once:
 
   // Setup Dispensers as output pins
@@ -126,9 +121,14 @@ void setup() {
   pinMode(dispenser_2_Open, OUTPUT);
   pinMode(dispenser_2_Close, OUTPUT);
 
+// Setup Buzzer as output
   pinMode(buzzer, OUTPUT);
 
-  lcd.init();  // initialize the lcd
+// Setup Stepper Motor Pins as output pins
+  pinMode(stepPin, OUTPUT);
+  pinMode(dirPin, OUTPUT);
+
+  lcd.init(); // initialize the lcd
   lcd.backlight();
 
   lcd.setCursor(0, 0);
@@ -147,15 +147,16 @@ void setup() {
   lcd.print("Scale");
 
   LoadCell.begin();
-  float calibrationValue;    // calibration value (see example file "Calibration.ino")
-  calibrationValue = 696.0;  // uncomment this if you want to set the calibration value in the sketch
+  float calibrationValue;   // calibration value (see example file "Calibration.ino")
+  calibrationValue = 696.0; // uncomment this if you want to set the calibration value in the sketch
 
-  EEPROM.get(calVal_eepromAdress, calibrationValue);  // uncomment this if you want to fetch the calibration value from eeprom
+  EEPROM.get(calVal_eepromAdress, calibrationValue); // uncomment this if you want to fetch the calibration value from eeprom
 
-  unsigned long stabilizingtime = 2000;  // preciscion right after power-up can be improved by adding a few seconds of stabilizing time
-  boolean _tare = true;                  // set this to false if you don't want tare to be performed in the next step
+  unsigned long stabilizingtime = 2000; // preciscion right after power-up can be improved by adding a few seconds of stabilizing time
+  boolean _tare = true;                 // set this to false if you don't want tare to be performed in the next step
   LoadCell.start(stabilizingtime, _tare);
-  if (LoadCell.getTareTimeoutFlag()) {
+  if (LoadCell.getTareTimeoutFlag())
+  {
     lcd.clear();
     lcd.setCursor(3, 0);
     lcd.print("Timeout");
@@ -163,8 +164,10 @@ void setup() {
     lcd.print("Check Wiring");
     while (1)
       ;
-  } else {
-    LoadCell.setCalFactor(calibrationValue);  // set calibration value (float)
+  }
+  else
+  {
+    LoadCell.setCalFactor(calibrationValue); // set calibration value (float)
     lcd.clear();
     lcd.setCursor(3, 0);
     lcd.print("Scale Ready");
@@ -172,13 +175,17 @@ void setup() {
 }
 
 // Main Loop
-void loop() {
+void loop()
+{
   // put your main code here, to run repeatedly:
   char typetodispence;
   int weighttodispence = getdetails(&typetodispence);
-  if (typetodispence = 'D') {
+  if (typetodispence = 'D')
+  {
     dispenceMixture(weighttodispence);
-  } else {
+  }
+  else
+  {
     dispence(typetodispence, weighttodispence);
   }
 
@@ -188,7 +195,8 @@ void loop() {
 // Custom Functions
 
 // Function to get what to dispence from the customer
-int getdetails(char *typetodispence) {
+int getdetails(char *typetodispence)
+{
   int weight = 0;
   lcd.clear();
   lcd.setCursor(3, 0);
@@ -196,17 +204,25 @@ int getdetails(char *typetodispence) {
   lcd.setCursor(3, 1);
   lcd.print("And Type");
 
-  while (1) {
+  while (1)
+  {
     char got = getachar();
 
-    if (got == '*') {
+    if (got == '*')
+    {
       weight /= 10;
-    } else if (got == '#') {
+    }
+    else if (got == '#')
+    {
       weight = 0;
-    } else if (got == 'A' || got == 'B' || got == 'C' || got == 'D') {
+    }
+    else if (got == 'A' || got == 'B' || got == 'C' || got == 'D')
+    {
       *typetodispence = got;
       return weight;
-    } else {
+    }
+    else
+    {
       weight *= 10;
       weight += got - '0';
     }
@@ -220,19 +236,24 @@ int getdetails(char *typetodispence) {
   }
 }
 
-char getachar() {
-  while (1) {
+char getachar()
+{
+  while (1)
+  {
     char key = keypad.getKey();
 
-    if (key) {
+    if (key)
+    {
       return (key);
     }
   }
 }
 
 // Function to give an audio alert to the user
-void beeper(int beeps) {
-  for (int i = 0; i < beeps; i++) {
+void beeper(int beeps)
+{
+  for (int i = 0; i < beeps; i++)
+  {
     // turn on the buzzer at 1535 frequency for 500 milliseconds
     tone(buzzer, 1535, 500);
     // add another 500 milliseconds of silence
@@ -243,40 +264,46 @@ void beeper(int beeps) {
   }
 }
 
-void dispence(char typetodispence, int weighttodispence) {
+void dispence(char typetodispence, int weighttodispence)
+{
   delay(100);
   int tare = getWeightFromScale();
   int offset;
-  switch (typetodispence) {
-    case 'A':
-      offset = Type1OffSet;
-      break;
-    case 'B':
-      offset = Type2OffSet;
-      break;
-    case 'C':
-      offset = Type3OffSet;
-      break;
+  switch (typetodispence)
+  {
+  case 'A':
+    offset = Type1OffSet;
+    break;
+  case 'B':
+    offset = Type2OffSet;
+    break;
+  case 'C':
+    offset = Type3OffSet;
+    break;
   }
   int target = tare + weighttodispence - offset;
-    openhopper(typetodispence);
-    lcd.clear();
-    lcd.setCursor(1, 0);
-    lcd.print("Dispensing.....");
-    do {
-      int progress = (int)(((float)weighttodispence / ((float)target - (float)tare)) * (float)16);
-      lcd.setCursor(1, 1);
-      for (int i = 0; i < progress; i++) {
-        lcd.print("#");
-      }
-      delay(100);
-    } while (target > getWeightFromScale());
-    closehopper(typetodispence);
+  openhopper(typetodispence);
+  lcd.clear();
+  lcd.setCursor(1, 0);
+  lcd.print("Dispensing.....");
+  do
+  {
+    int progress = (int)(((float)weighttodispence / ((float)target - (float)tare)) * (float)16);
+    lcd.setCursor(1, 1);
+    for (int i = 0; i < progress; i++)
+    {
+      lcd.print("#");
+    }
+    delay(100);
+  } while (target > getWeightFromScale());
+  closehopper(typetodispence);
 }
 
-void dispenceMixture(int weighttodispence) {
+void dispenceMixture(int weighttodispence)
+{
   int smallWeights = weighttodispence / 6;
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 2; i++)
+  {
     dispence('A', smallWeights);
     delay(1000);
     dispence('B', smallWeights);
@@ -286,61 +313,68 @@ void dispenceMixture(int weighttodispence) {
   }
 }
 
-void openhopper(char dispenser) {
-  switch (dispenser) {
-    case 'A':
-      digitalWrite(dispenser_0_Open, HIGH);
-      delay(dispenserOpenDelay);
-      digitalWrite(dispenser_0_Open, LOW);
-      break;
+void openhopper(char dispenser)
+{
+  switch (dispenser)
+  {
+  case 'A':
+    digitalWrite(dispenser_0_Open, HIGH);
+    delay(dispenserOpenDelay);
+    digitalWrite(dispenser_0_Open, LOW);
+    break;
 
-    case 'B':
-      digitalWrite(dispenser_1_Open, HIGH);
-      delay(dispenserOpenDelay);
-      digitalWrite(dispenser_1_Open, LOW);
-      break;
+  case 'B':
+    digitalWrite(dispenser_1_Open, HIGH);
+    delay(dispenserOpenDelay);
+    digitalWrite(dispenser_1_Open, LOW);
+    break;
 
-    case 'C':
-      digitalWrite(dispenser_2_Open, HIGH);
-      delay(dispenserOpenDelay);
-      digitalWrite(dispenser_2_Open, LOW);
-      break;
+  case 'C':
+    digitalWrite(dispenser_2_Open, HIGH);
+    delay(dispenserOpenDelay);
+    digitalWrite(dispenser_2_Open, LOW);
+    break;
   }
 }
-void closehopper(char dispenser) {
-  switch (dispenser) {
-    case 'A':
-      digitalWrite(dispenser_0_Close, HIGH);
-      delay(dispenserCloseDelay);
-      digitalWrite(dispenser_0_Close, LOW);
-      break;
+void closehopper(char dispenser)
+{
+  switch (dispenser)
+  {
+  case 'A':
+    digitalWrite(dispenser_0_Close, HIGH);
+    delay(dispenserCloseDelay);
+    digitalWrite(dispenser_0_Close, LOW);
+    break;
 
-    case 'B':
-      digitalWrite(dispenser_1_Close, HIGH);
-      delay(dispenserCloseDelay);
-      digitalWrite(dispenser_1_Close, LOW);
-      break;
+  case 'B':
+    digitalWrite(dispenser_1_Close, HIGH);
+    delay(dispenserCloseDelay);
+    digitalWrite(dispenser_1_Close, LOW);
+    break;
 
-    case 'C':
-      digitalWrite(dispenser_2_Close, HIGH);
-      delay(dispenserCloseDelay);
-      digitalWrite(dispenser_2_Close, LOW);
-      break;
+  case 'C':
+    digitalWrite(dispenser_2_Close, HIGH);
+    delay(dispenserCloseDelay);
+    digitalWrite(dispenser_2_Close, LOW);
+    break;
   }
 }
 
-int getWeightFromScale() {
+int getWeightFromScale()
+{
 
   static boolean newDataReady = 0;
-  const int weightReadDelayInterval = 0;  // increase value to slow down serial print activity
+  const int weightReadDelayInterval = 0; // increase value to slow down serial print activity
 
   // check for new data/start next conversion:
   if (LoadCell.update())
     newDataReady = true;
 
   // get smoothed value from the dataset:
-  if (newDataReady) {
-    if (millis() > t + weightReadDelayInterval) {
+  if (newDataReady)
+  {
+    if (millis() > t + weightReadDelayInterval)
+    {
       float i = LoadCell.getData();
       newDataReady = 0;
       t = millis();
@@ -362,7 +396,35 @@ int getWeightFromScale() {
   */
 }
 
-void thankyou() {
+void seal()
+{
+  digitalWrite(dirPin, HIGH);
+
+  // Spin motor quickly
+  for (int x = 0; x < sealerSteps; x++)
+  {
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(1000);
+  }
+  delay(1000); // Wait a second
+
+  // Set motor direction counterclockwise
+  digitalWrite(dirPin, LOW);
+
+  // Spin motor quickly
+  for (int x = 0; x < sealerSteps; x++)
+  {
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(1000);
+  }
+}
+
+void thankyou()
+{
 
   lcd.clear();
   lcd.setCursor(3, 0);
