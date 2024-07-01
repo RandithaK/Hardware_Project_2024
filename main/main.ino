@@ -100,7 +100,7 @@ void dispence(char typetodispence, int weighttodispence);
 // To get the mass from the scale
 int getWeightFromScale();
 // To open the hopper
-void openhopper(char hopper);
+void openhopper(char hopper); 
 // To close the hopper
 void closehopper(char hopper);
 // A helpper function to make mixtures
@@ -182,7 +182,7 @@ void loop()
   // put your main code here, to run repeatedly:
   char typetodispence;
   int weighttodispence = getdetails(&typetodispence);
-  if (typetodispence = 'D')
+  if (typetodispence == 'D')
   {
     dispenceMixture(weighttodispence);
   }
@@ -372,7 +372,7 @@ int getWeightFromScale()
   if (LoadCell.update())
     newDataReady = true;
 
-  // get smoothed value from the dataset:
+  // get smoothed value from the dataset: 
   if (newDataReady)
   {
     if (millis() > t + weightReadDelayInterval)
