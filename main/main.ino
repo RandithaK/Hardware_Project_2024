@@ -244,7 +244,7 @@ char getachar()
   {
     char key = keypad.getKey();
 
-    if (key)
+    if (key)  
     {
       return (key);
     }
