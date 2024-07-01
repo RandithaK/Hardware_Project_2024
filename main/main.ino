@@ -121,10 +121,10 @@ void setup()
   pinMode(dispenser_2_Open, OUTPUT);
   pinMode(dispenser_2_Close, OUTPUT);
 
-// Setup Buzzer as output
+  // Setup Buzzer as output
   pinMode(buzzer, OUTPUT);
 
-// Setup Stepper Motor Pins as output pins
+  // Setup Stepper Motor Pins as output pins
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
 
