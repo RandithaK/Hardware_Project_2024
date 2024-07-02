@@ -59,11 +59,21 @@ unsigned long t = 0;
 
 const byte ROWS = 4; // four rows
 const byte COLS = 4; // four columns
+/*
+Default Key layout
 char keys[ROWS][COLS] = {
     {'1', '2', '3', 'A'},
     {'4', '5', '6', 'B'},
     {'7', '8', '9', 'C'},
-    {'*', '0', '#', 'D'}};
+    {'#', '0', '*', 'D'}};
+*/
+
+// Custom Layout
+char keys[ROWS][COLS] = {
+    {'D', '*', '0', '#'},
+    {'C', '9', '8', '7'},
+    {'B', '6', '5', '4'},
+    {'A', '3', '2', '1'}};
 byte rowPins[ROWS] = {keypad_row1, keypad_row2, keypad_row3, keypad_row4}; // connect to the row pinouts of the keypad
 byte colPins[COLS] = {keypad_col1, keypad_col2, keypad_col3, keypad_col4}; // connect to the column pinouts of the keypad
 
