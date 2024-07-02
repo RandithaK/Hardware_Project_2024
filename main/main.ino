@@ -15,16 +15,16 @@
 // Dispensing Control Pins
 #define dispenser_0_Open A0
 #define dispenser_0_Close A1
-#define dispenser_1_Open A2
-#define dispenser_1_Close A3
+#define dispenser_1_Open A7
+#define dispenser_1_Close A6
 #define dispenser_2_Open A4
 #define dispenser_2_Close A5
 #define dispenserOpenDelay 2000  // in ms
-#define dispenserCloseDelay 3000 // in ms
+#define dispenserCloseDelay 2000 // in ms
 
 // Sealing Unit Control
-#define sealer_assembly_Step 52
-#define sealer_assembly_Direction 53
+#define sealer_assembly_Step 3
+#define sealer_assembly_Direction 2
 
 // Weight Scale
 #define HX711_dout 4
@@ -45,15 +45,15 @@ unsigned long t = 0;
 // Pins 0 and 1 used for serial communication and hence not used for any other purpose for stabilty
 
 // Keypad Connections
+#define keypad_row1 22
+#define keypad_row2 24
+#define keypad_row3 26
+#define keypad_row4 28
+
 #define keypad_col1 30
 #define keypad_col2 32
 #define keypad_col3 34
 #define keypad_col4 36
-
-#define keypad_row1 31
-#define keypad_row2 33
-#define keypad_row3 35
-#define keypad_row4 37
 
 // Library Code for Keypad
 
@@ -80,7 +80,7 @@ LiquidCrystal_I2C lcd(0x27, 20, 4); // Setting up the LCD at address 0x27
 // Sealing Unit
 #define dirPin 2
 #define stepPin 3
-#define sealerSteps 200 // Change this value as need to adjest the movement of the sealer
+#define sealerSteps 200 // Change this value as need to adjest the movement of the sealer   
 
 // Offset values for Grams
 #define Type1OffSet 0
@@ -89,6 +89,8 @@ LiquidCrystal_I2C lcd(0x27, 20, 4); // Setting up the LCD at address 0x27
 
 // Custom Functions Prototypes
 
+// Initialises the Hoppers
+void starthoppers();
 // Give an audio alert to the user
 void beeper(int beeps);
 // Get the Order details from the customer
@@ -100,7 +102,7 @@ void dispence(char typetodispence, int weighttodispence);
 // To get the mass from the scale
 int getWeightFromScale();
 // To open the hopper
-void openhopper(char hopper); 
+void openhopper(char hopper);
 // To close the hopper
 void closehopper(char hopper);
 // A helpper function to make mixtures
@@ -173,6 +175,10 @@ void setup()
     lcd.clear();
     lcd.setCursor(3, 0);
     lcd.print("Scale Ready");
+    starthoppers();
+    lcd.clear();
+    lcd.setCursor(3, 0);
+    lcd.print("System Ready");
   }
 }
 
@@ -244,7 +250,7 @@ char getachar()
   {
     char key = keypad.getKey();
 
-    if (key)  
+    if (key)
     {
       return (key);
     }
@@ -372,7 +378,7 @@ int getWeightFromScale()
   if (LoadCell.update())
     newDataReady = true;
 
-  // get smoothed value from the dataset: 
+  // get smoothed value from the dataset:
   if (newDataReady)
   {
     if (millis() > t + weightReadDelayInterval)
@@ -400,19 +406,6 @@ int getWeightFromScale()
 
 void seal()
 {
-  digitalWrite(dirPin, HIGH);
-
-  // Spin motor quickly
-  for (int x = 0; x < sealerSteps; x++)
-  {
-    digitalWrite(stepPin, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(stepPin, LOW);
-    delayMicroseconds(1000);
-  }
-  delay(1000); // Wait a second
-
-  // Set motor direction counterclockwise
   digitalWrite(dirPin, LOW);
 
   // Spin motor quickly
@@ -422,6 +415,21 @@ void seal()
     delayMicroseconds(1000);
     digitalWrite(stepPin, LOW);
     delayMicroseconds(1000);
+    delay(1);
+  }
+  delay(1000); // Wait a second
+
+  // Set motor direction counterclockwise (reverse)
+  digitalWrite(dirPin, HIGH);
+
+  // Spin motor quickly
+  for (int x = 0; x < sealerSteps; x++)
+  {
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(1000);
+    delay(1);
   }
 }
 
@@ -434,4 +442,22 @@ void thankyou()
   lcd.setCursor(2, 1);
   lcd.print("Next Please");
   delay(2000);
+}
+void starthoppers()
+{
+  lcd.clear();
+  lcd.setCursor(1, 0);
+  lcd.print("Starting Hoppers");
+  
+  digitalWrite(dispenser_0_Close, HIGH);
+  delay(dispenserCloseDelay);
+  digitalWrite(dispenser_0_Close, LOW);
+
+  digitalWrite(dispenser_1_Close, HIGH);
+  delay(dispenserCloseDelay);
+  digitalWrite(dispenser_1_Close, LOW);
+
+  digitalWrite(dispenser_2_Close, HIGH);
+  delay(dispenserCloseDelay);
+  digitalWrite(dispenser_2_Close, LOW);
 }
