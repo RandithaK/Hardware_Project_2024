@@ -515,32 +515,31 @@ void greetText()
 {
   String text = "Spicy Bites";
   int text_Len = text.length();
-//  int j = 0;
-    for (int i = 0; i < (LCDColumns - text_Len + 1); i++)
-    {
-      lcd.clear();
-      lcd.setCursor(i, 0);
-      lcd.print(text);
-      delay(TextScrollSpeed);
-    }
-
-    delay(TextScrollRest);
-
-    for (int i = (LCDColumns - text_Len); i > -1; i--)
-    {
-      lcd.clear();
-      lcd.setCursor(i, 0);
-      lcd.print(text);
-      delay(TextScrollSpeed);
-    }
-
-    delay(TextScrollRest);
-  
-
+  //  int j = 0;
+  for (int i = 0; i < (LCDColumns - text_Len + 1); i++)
+  {
     lcd.clear();
-    lcd.setCursor(0, 0);
+    lcd.setCursor(i, 0);
     lcd.print(text);
     delay(TextScrollSpeed);
+  }
+
+  delay(TextScrollRest);
+
+  for (int i = (LCDColumns - text_Len); i > -1; i--)
+  {
+    lcd.clear();
+    lcd.setCursor(i, 0);
+    lcd.print(text);
+    delay(TextScrollSpeed);
+  }
+
+  delay(TextScrollRest);
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(text);
+  delay(TextScrollSpeed);
 
   delay(TextScrollRest);
 }
