@@ -101,6 +101,8 @@ LiquidCrystal_I2C lcd(0x27, LCDColumns, LCDRows); // Setting up the LCD at addre
 #define Type2OffSet 0
 #define Type3OffSet 0
 
+#define MaxTimetoDispence 10000
+
 // Custom Functions Prototypes
 // Greeting Message
 void greetText();
@@ -128,6 +130,10 @@ void dispenceMixture(int weighttodispence);
 void seal();
 // Ending the program gracefully
 void thankyou();
+// Reset Function
+void (*resetFunc)(void) = 0; // declare reset function at address 0
+// Handelling Errors Gracefully
+void systemerror();
 
 // Main Entry Point
 void setup()
@@ -291,6 +297,7 @@ void beeper(int beeps)
 void dispence(char typetodispence, int weighttodispence)
 {
   delay(100);
+  unsigned long StartTime = millis();
   int tare = getWeightFromScale();
   int offset;
   switch (typetodispence)
@@ -319,6 +326,12 @@ void dispence(char typetodispence, int weighttodispence)
       lcd.print("#");
     }
     delay(100);
+    {
+      if ((millis() - StartTime) >= MaxTimetoDispence)
+      {
+        systemerror();
+      }
+    }
   } while (target > getWeightFromScale());
   closehopper(typetodispence);
 }
@@ -542,4 +555,22 @@ void greetText()
   delay(TextScrollSpeed);
 
   delay(TextScrollRest);
+}
+
+void systemerror()
+{
+
+  lcd.clear();
+  lcd.setCursor(1, 0);
+  lcd.print("System Error");
+  lcd.setCursor(0, 1);
+  lcd.print("Check Hoppers");
+  delay(10000);
+  lcd.clear();
+  lcd.setCursor(1, 0);
+  lcd.print("Check Hoppers");
+  lcd.setCursor(0, 1);
+  lcd.print("Rebooting...");
+  delay(2000);
+  resetFunc();
 }
