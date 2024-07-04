@@ -551,7 +551,7 @@ void greetText()
 
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print(text);
+  lcd.print(text);      
   delay(TextScrollSpeed);
 
   delay(TextScrollRest);
@@ -573,4 +573,4 @@ void systemerror()
   lcd.print("Rebooting...");
   delay(2000);
   resetFunc();
-}
+} 
