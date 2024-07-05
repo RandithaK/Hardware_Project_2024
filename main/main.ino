@@ -22,10 +22,6 @@
 #define dispenserOpenDelay 500  // in ms
 #define dispenserCloseDelay 500 // in ms
 
-// Sealing Unit Control
-#define sealer_assembly_Step 3
-#define sealer_assembly_Direction 2
-
 // Weight Scale
 #define HX711_dout 4
 #define HX711_sck 5
