@@ -331,13 +331,12 @@ void dispence(char typetodispence, int weighttodispence)
       }
     }
     {
-      if ((millis() - shaketime)>shakeInterval)
+      if ((millis() - shaketime) > shakeInterval)
       {
         openhopper(typetodispence);
         closehopper(typetodispence);
         shaketime = millis();
       }
-      
     }
   } while (target > getWeightFromScale());
   closehopper(typetodispence);
@@ -425,19 +424,6 @@ int getWeightFromScale()
       return i;
     }
   }
-  /*
-  I don't think we'll need this code, it's for taring! Which I implemented to be done automatically in my code.
-    // receive command from serial terminal, send 't' to initiate tare operation:
-    if (Serial.available() > 0) {
-      char inByte = Serial.read();
-      if (inByte == 't') LoadCell.tareNoDelay();
-    }
-
-    // check if last tare operation is complete:
-    if (LoadCell.getTareStatus() == true) {
-      Serial.println("Tare complete");
-    }
-  */
 }
 
 void seal()
@@ -558,7 +544,7 @@ void greetText()
 
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print(text);      
+  lcd.print(text);
   delay(TextScrollSpeed);
 
   delay(TextScrollRest);
@@ -580,4 +566,4 @@ void systemerror()
   lcd.print("Rebooting...");
   delay(2000);
   resetFunc();
-} 
+}
