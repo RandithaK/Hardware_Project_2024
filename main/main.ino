@@ -93,7 +93,7 @@ LiquidCrystal_I2C lcd(0x27, LCDColumns, LCDRows); // Setting up the LCD at addre
 // Sealing Unit
 #define dirPin 2
 #define stepPin 3
-#define sealerSteps 230 // Change this value as need to adjest the movement of the sealer
+#define sealerSteps 240 // Change this value as need to adjest the movement of the sealer
 #define sealersetupsteps 60
 
 // Offset values for Grams
@@ -101,7 +101,8 @@ LiquidCrystal_I2C lcd(0x27, LCDColumns, LCDRows); // Setting up the LCD at addre
 #define Type2OffSet 0
 #define Type3OffSet 0
 
-#define MaxTimetoDispence 10000
+#define MaxTimetoDispence 20000
+#define shakeInterval 500
 
 // Custom Functions Prototypes
 // Greeting Message
@@ -317,6 +318,7 @@ void dispence(char typetodispence, int weighttodispence)
   lcd.clear();
   lcd.setCursor(1, 0);
   lcd.print("Dispensing.....");
+  int shaketime = millis();
   do
   {
     int progress = (int)(((float)weighttodispence / ((float)target - (float)tare)) * (float)16);
@@ -331,6 +333,15 @@ void dispence(char typetodispence, int weighttodispence)
       {
         systemerror();
       }
+    }
+    {
+      if ((millis() - shaketime)>shakeInterval)
+      {
+        openhopper(typetodispence);
+        closehopper(typetodispence);
+        shaketime = millis();
+      }
+      
     }
   } while (target > getWeightFromScale());
   closehopper(typetodispence);
